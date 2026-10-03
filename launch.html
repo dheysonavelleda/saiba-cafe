@@ -8,7 +8,7 @@
   :root{
     --bg:#12100E; --amber:#FF8A00; --creme:#F5EFE6;
     --muted:#8A7A6A; --muted-strong:#A89A8C;
-    --thin:"Segoe UI Light","Segoe UI Semilight","Helvetica Neue",Segoe UI,system-ui,sans-serif;
+    --thin:"Corbel","Segoe UI",sans-serif;
     --serif:Georgia,"Times New Roman",serif;
     --shadow:0 1px 3px rgba(8,4,3,.9),0 0 10px rgba(8,4,3,.55),0 0 26px rgba(8,4,3,.35);
   }
@@ -18,12 +18,11 @@
   html.shots::-webkit-scrollbar{display:none}
 
   #journey{height:480vh;position:relative}
-  /* fundo da cena: rampa VERTICAL re-amostrada do fundo da foto (scan System.Drawing
-     do bean-cena.jpg: borda topo #1D0F0E/L18 -> brilho #1F1110/L20 em 33% -> meios
-     L14-17 -> base #140808/L10.6 em 91%). A distribuição de brilho do bg da foto é
-     vertical, não radial — o ramp casa com ela na posição onde a foto está a cada escala. */
+  /* fundo da cena: o mesmo --bg do site (#12100E), sem rampa própria.
+     A ambiência quente em volta do grão fica por conta do glow (recorte
+     borrado), não do fundo — assim a transição hub -> grão não muda de cor. */
   #scene{position:sticky;top:0;height:100vh;overflow:hidden;
-    background:linear-gradient(180deg,#1A0C0B 0%,#1D0F0E 23%,#1F1110 33%,#1A0E0D 57%,#190B0A 81%,#140808 91%,#130707 100%)}
+    background:var(--bg)}
 
   .bar{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
     padding:26px 38px;z-index:40}
@@ -49,7 +48,7 @@
   #intro{position:absolute;left:50%;top:16%;transform:translate(-50%,-50%);text-align:center;z-index:20;
     pointer-events:none;width:min(88vw,900px)}
   #intro .kick{font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:var(--muted-strong);margin:0 0 22px}
-  #intro h1{font-size:clamp(36px,5.4vw,74px);line-height:1.12;margin:0;letter-spacing:.01em;font-weight:300;
+  #intro h1{font-family:var(--serif);font-size:clamp(36px,5.4vw,74px);line-height:1.12;margin:0;letter-spacing:.01em;font-weight:400;
     text-shadow:var(--shadow)}
   #intro h1 .it{font-family:var(--serif);font-style:italic;font-weight:400}
   #intro .sub{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.5vw,19px);color:rgba(245,239,230,.72);
