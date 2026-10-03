@@ -285,17 +285,24 @@ ul { list-style: none; }
 .card:hover, .card:focus-visible { transform: translateY(-6px); border-color: rgba(255, 138, 0, .55); }
 .card-tag {
   font-family: var(--sans);
-  font-size: 10px;
-  letter-spacing: .05em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .18em;
   text-transform: uppercase;
+  color: var(--muted-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   width: fit-content;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid currentColor;
 }
-.tag-noticia { color: var(--amber); }
-.tag-curiosidade { color: var(--teal); }
-.tag-opiniao { color: var(--violet); }
+.card-tag::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--amber);
+}
 .card h3 {
   font-family: var(--display);
   font-weight: 700;
