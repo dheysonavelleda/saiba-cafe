@@ -98,14 +98,4 @@
       });
     });
   }
-
-  /* ---------- 4. formulário (v0 sem backend) ---------- */
-  var form = document.getElementById("email-form");
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var note = form.querySelector(".email-note");
-      if (note) note.hidden = false;
-    });
-  }
 })();
