@@ -1,0 +1,22 @@
+# interna: ferramentas e artefatos de trabalho
+tools/
+preview/
+arial.ttf
+server.js
+grao-concept.html
+
+# assets nao referenciados pelas paginas
+assets/grao/bean-b-*
+assets/grao/bean-cut.png
+assets/grao/bean-cut4.png
+assets/grao/bean-cut-src.jpg
+assets/grao/bean-cena.jpg
+assets/grao/bean.png
+assets/grao/bean4k.png
+assets/grao/l0.jpg
+assets/grao/l1.jpg
+assets/grao/l2.jpg
+assets/blog/a-janela-capa.png
+
+# vercel local
+.vercel

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saiba Café — o grão</title>
+<style>
+  :root{
+    --bg:#12100E; --amber:#FF8A00; --creme:#F5EFE6;
+    --muted:#8A7A6A; --muted-strong:#A89A8C;
+    --thin:"Segoe UI Light","Segoe UI Semilight","Helvetica Neue",Segoe UI,system-ui,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+    --shadow:0 1px 3px rgba(8,4,3,.9),0 0 10px rgba(8,4,3,.55),0 0 26px rgba(8,4,3,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--creme);font-family:var(--thin);font-weight:300}
+  html.shots{scroll-behavior:auto;scrollbar-width:none}
+  html.shots::-webkit-scrollbar{display:none}
+
+  #journey{height:480vh;position:relative}
+  /* fundo da cena: rampa VERTICAL re-amostrada do fundo da foto (scan System.Drawing
+     do bean-cena.jpg: borda topo #1D0F0E/L18 -> brilho #1F1110/L20 em 33% -> meios
+     L14-17 -> base #140808/L10.6 em 91%). A distribuição de brilho do bg da foto é
+     vertical, não radial — o ramp casa com ela na posição onde a foto está a cada escala. */
+  #scene{position:sticky;top:0;height:100vh;overflow:hidden;
+    background:linear-gradient(180deg,#1A0C0B 0%,#1D0F0E 23%,#1F1110 33%,#1A0E0D 57%,#190B0A 81%,#140808 91%,#130707 100%)}
+
+  .bar{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
+    padding:26px 38px;z-index:40}
+  .brand{font-size:11px;letter-spacing:.32em;color:rgba(245,239,230,.55);text-transform:uppercase;text-shadow:var(--shadow)}
+  .skip{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,239,230,.7);
+    text-decoration:none;font-weight:300;text-shadow:var(--shadow)}
+  .skip .arrow{color:var(--amber);margin-left:2px}
+  .skip:hover{color:var(--creme)}
+
+  /* cena: UMA imagem — o RECORTE do grão com alpha real (round 4: contorno
+     re-derivado — marching squares + gaussiana σ3.5 + raster 2x de cobertura;
+     passos ≤2px em todo limiar de alpha, rampa AA ~2.3px). Zero fundo, zero
+     máscara: o quadrado morre por construção. O campo largo é o ramp do #scene. */
+  #beanWrap{position:absolute;left:50%;top:57%;width:min(88vh,66vw);aspect-ratio:2987/4000;
+    transform:translate(-50%,-50%);z-index:2}
+  #bean{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;will-change:transform}
+  /* ambient glow: o MESMO recorte borrado, no MESMO box e MESMO zoom — halo quente
+     que abraça a silhueta do grão (sem fundo na imagem = sem painel possível). */
+  #glow{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:-1;
+    will-change:transform,filter;filter:blur(36px)}
+
+  /* intro */
+  #intro{position:absolute;left:50%;top:16%;transform:translate(-50%,-50%);text-align:center;z-index:20;
+    pointer-events:none;width:min(88vw,900px)}
+  #intro .kick{font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:var(--muted-strong);margin:0 0 22px}
+  #intro h1{font-size:clamp(36px,5.4vw,74px);line-height:1.12;margin:0;letter-spacing:.01em;font-weight:300;
+    text-shadow:var(--shadow)}
+  #intro h1 .it{font-family:var(--serif);font-style:italic;font-weight:400}
+  #intro .sub{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.5vw,19px);color:rgba(245,239,230,.72);
+    margin:20px 0 0;font-weight:400;text-shadow:var(--shadow)}
+  #cue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:.4em;
+    text-transform:uppercase;color:var(--muted-strong);z-index:20;text-align:center;text-shadow:var(--shadow)}
+  #cue .arrow{display:block;color:rgba(245,239,230,.55);font-size:15px;margin-top:6px;font-weight:300;
+    animation:bob 2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+  /* labels — filhos do beanWrap: o ponto é COLADO na feição do grão e acompanha
+     o zoom (posição calculada no JS). Caixa/linha ficam em px fixos, texto não escala. */
+  .label{position:absolute;z-index:25;opacity:0;pointer-events:none;will-change:opacity}
+  .label .dot{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(245,239,230,.92);
+    transform:translate(-50%,-50%);box-shadow:0 0 0 1.5px rgba(8,4,3,.55),0 0 10px 3px rgba(8,4,3,.75)}
+  .label .dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;
+    border:1px solid rgba(245,239,230,.22)}
+  .label .line{position:absolute;height:1px;background:rgba(245,239,230,.38);
+    box-shadow:0 0 0 1px rgba(8,4,3,.5),0 0 6px rgba(8,4,3,.9)}
+  .label .box{position:absolute;width:224px;top:-13px}
+  .label.to-r .line{left:4px;top:0;width:46px}
+  .label.to-r .box{left:80px}
+  .label.to-l .line{right:4px;top:0;width:46px}
+  .label.to-l .box{right:80px;text-align:right}
+  .label .head{display:flex;align-items:center;gap:13px}
+  .label.to-l .head{flex-direction:row-reverse}
+  .label .ico{width:26px;height:26px;flex:0 0 auto;opacity:.95}
+  .label .ico *{stroke:rgba(245,239,230,.92);stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .label .ico circle.f{fill:rgba(245,239,230,.92);stroke:none}
+  .label .num{font-size:10px;letter-spacing:.26em;color:rgba(245,239,230,.65);text-shadow:var(--shadow)}
+  .label .name{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:rgba(245,239,230,.97);
+    font-weight:300;text-shadow:var(--shadow)}
+  .label .txt{font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.5;
+    color:rgba(245,239,230,.97);margin:9px 0 0;font-weight:400;text-shadow:var(--shadow)}
+  .label .src{font-size:10px;color:rgba(245,239,230,.75);margin:7px 0 0;letter-spacing:.04em;
+    text-shadow:var(--shadow);display:inline-block;padding:3px 9px;
+    background:radial-gradient(closest-side,rgba(18,16,14,.5) 55%,rgba(18,16,14,0) 100%)}
+  /* variante rev: caixa ACIMA do dot — o zoom fundo empurra o dot da CAFEÍNA
+     para a beira de baixo da tela e a caixa embaixo dele sai cortada; acima ela
+     cabe sempre (o dot continua preso na feição, com trava de borda no JS) */
+  .label.rev .box{top:auto;bottom:13px;display:flex;flex-direction:column-reverse}
+  .label.rev .src{align-self:flex-end}
+
+  /* finale */
+  #finale{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);z-index:30;text-align:center;
+    opacity:0;pointer-events:none}
+  #finale.on{pointer-events:auto}
+  .cta{display:inline-flex;align-items:center;gap:10px;background:var(--amber);color:#1B1206;
+    font-family:var(--thin);font-weight:400;font-size:13px;letter-spacing:.22em;text-transform:uppercase;
+    padding:15px 30px;border:0;border-radius:999px;text-decoration:none;
+    box-shadow:0 4px 24px rgba(0,0,0,.45)}
+  #finale .note{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,239,230,.92);
+    margin:15px 0 0;text-shadow:var(--shadow);display:inline-block;padding:6px 24px;
+    background:radial-gradient(closest-side,rgba(18,16,14,.55) 55%,rgba(18,16,14,0) 100%)}
+
+  /* counter */
+  #counter{position:fixed;left:38px;bottom:32px;z-index:40;font-size:11px;letter-spacing:.3em;
+    color:rgba(245,239,230,.55);opacity:0;text-transform:uppercase;font-weight:300;text-shadow:var(--shadow)}
+  #counter b{font-weight:400;color:rgba(245,239,230,.92)}
+
+  @media (max-width:700px){
+    .bar{padding:20px 22px}
+    #beanWrap{width:min(64vh,80vw)}
+    .label .box{width:150px}
+    .label.to-r .box{left:64px}
+    .label.to-l .box{right:64px}
+    .label.to-r .line{width:38px}
+    .label.to-l .line{width:38px}
+    /* óleo: dot cai no flanco direito (72.3% da foto) — com a caixa à direita
+       estoura a tela no mobile; aqui a caixa abre pra ESQUERDA (sobre a face) */
+    #lb-oleo .line{left:auto;right:4px;width:38px}
+    #lb-oleo .box{left:auto;right:64px;text-align:right}
+    #lb-oleo .head{flex-direction:row-reverse}
+    .label .head{gap:10px}
+    .label .ico{width:22px;height:22px}
+    .label .num{font-size:9px;letter-spacing:.2em}
+    .label .name{font-size:10px;letter-spacing:.18em}
+    .label .txt{font-size:13.5px}
+    .label .src{font-size:9px}
+    #counter{left:22px;bottom:24px}
+  }
+  @media (prefers-reduced-motion:reduce){#cue .arrow{animation:none}}
+</style>
+</head>
+<body>
+  <div id="journey">
+    <div id="scene">
+      <div class="bar">
+        <span class="brand">SAIBA·CAFÉ</span>
+        <a class="skip" href="/index.html">pular pro café <span class="arrow">→</span></a>
+      </div>
+
+      <div id="beanWrap">
+        <img id="glow" src="assets/grao/bean-cut5.png" alt="" aria-hidden="true">
+        <img id="bean" src="assets/grao/bean-cut5.png" alt="grão de café — foto macro">
+
+        <!-- 01 · A FENDA -->
+        <div class="label to-r" id="lb-fenda">
+          <span class="dot"></span><span class="line"></span>
+          <div class="box">
+            <div class="head">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M12 2 C 8.5 7, 15.5 10, 12 13 C 8.5 16, 15.5 19, 12 22"/></svg>
+              <span class="num">01</span><span class="name">A FENDA</span>
+            </div>
+            <p class="txt">O risco no meio dele.<br>Por aqui vive o embrião.</p>
+            <p class="src">fonte: anatomia da semente — NIH/PMC</p>
+          </div>
+        </div>
+
+        <!-- 02 · O ESPELHO -->
+        <div class="label to-r" id="lb-espelho">
+          <span class="dot"></span><span class="line"></span>
+          <div class="box">
+            <div class="head">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M10 4 A 8 8 0 0 0 10 20 Z"/><path d="M14 4 A 8 8 0 0 1 14 20 Z"/></svg>
+              <span class="num">02</span><span class="name">O ESPELHO</span>
+            </div>
+            <p class="txt">A cara lisa: aqui ele repousou<br>contra a irmã, dentro da cereja.</p>
+            <p class="src">fonte: Wikipedia — peaberry</p>
+          </div>
+        </div>
+
+        <!-- 03 · A ÁGUA -->
+        <div class="label to-l" id="lb-agua">
+          <span class="dot"></span><span class="line"></span>
+          <div class="box">
+            <div class="head">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M12 3 C 12 3, 5.5 11, 5.5 15.5 A 6.5 6.5 0 0 0 18.5 15.5 C 18.5 11, 12 3, 12 3 Z"/></svg>
+              <span class="num">03</span><span class="name">A ÁGUA</span>
+            </div>
+            <p class="txt">~11% do grão verde é água.<br>É ela que evapora na torra.</p>
+            <p class="src">fonte: SCA — grão verde 10–12% de umidade</p>
+          </div>
+        </div>
+
+        <!-- 04 · O ÓLEO -->
+        <div class="label to-r" id="lb-oleo">
+          <span class="dot"></span><span class="line"></span>
+          <div class="box">
+            <div class="head">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M8 3 C 8 3, 3 9.5, 3 13.5 A 5 5 0 0 0 13 13.5 C 13 9.5, 8 3, 8 3 Z"/><path d="M6.5 14.5 A 4 4 0 0 0 10.5 17.8"/><path d="M19 12.5 C 19 12.5, 17 15.5, 17 17 A 2 2 0 0 0 21 17 C 21 15.5, 19 12.5, 19 12.5 Z"/></svg>
+              <span class="num">04</span><span class="name">O ÓLEO</span>
+            </div>
+            <p class="txt">A superfície que brilha.<br>Dele nasce a crema na xícara.</p>
+            <p class="src">fonte: Illy &amp; Viani — The Science of Quality</p>
+          </div>
+        </div>
+
+        <!-- 05 · A CAFEÍNA -->
+        <div class="label to-l rev" id="lb-cafe">
+          <span class="dot"></span><span class="line"></span>
+          <div class="box">
+            <div class="head">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M13 3 L7 13 L11.5 13 L9.5 21 L17 10 L12.5 10 Z"/></svg>
+              <span class="num">05</span><span class="name">A CAFEÍNA</span>
+            </div>
+            <p class="txt">~1,2% no arábica<br>~2,2% no conilon</p>
+            <p class="src">fonte: ICO — composição do grão</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="intro">
+        <h1>Isso aqui é<br>um <span class="it">grão</span> de café.</h1>
+        <p class="sub">E ele tem mais dentro do que parece.</p>
+      </div>
+
+      <div id="cue">desce<span class="arrow">↓</span></div>
+
+      <div id="finale">
+        <a class="cta" href="/index.html">bora pro café →</a>
+        <p class="note">do grão à xícara — todo dia às 07h30</p>
+      </div>
+
+      <div id="counter"><b>01</b> — 05</div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var q = new URLSearchParams(location.search);
+    if (q.has("shots")) document.documentElement.classList.add("shots");
+    var forced = q.has("p") ? Math.min(1, Math.max(0, parseFloat(q.get("p")))) : null;
+
+    /* UMA imagem, um zoom contínuo — e NUNCA borrado:
+       o teto do zoom é calculado dos pixels reais da foto vs os pixels
+       que ela ocupa na tela (com devicePixelRatio). Foto pequena = zoom
+       menor; foto grande = zoom funde. Em nenhum caso estica pixel. */
+    var S_DESIRED = 1.6;    // zoom alvo: grão preenche ~98% da altura da tela (com foto maior)
+    var S_MAX = S_DESIRED;  // recalculado no load/resize
+
+    var bean = document.getElementById("bean");
+    var glow = document.getElementById("glow");
+    var wrap = document.getElementById("beanWrap");
+    /* fx/fy: feição do grão em % da própria foto (o ponto cola nela e acompanha o zoom) */
+    var labels = [
+      {el: document.getElementById("lb-fenda"),   fx:50.5, fy:50, num:1, a:.22, b:.34},
+      {el: document.getElementById("lb-espelho"), fx:62, fy:48, num:2, a:.38, b:.48},
+      {el: document.getElementById("lb-agua"),    fx:36, fy:38, num:3, a:.52, b:.58},
+      {el: document.getElementById("lb-oleo"),    fx:64.7, fy:36.5, num:4, a:.62, b:.69},
+      {el: document.getElementById("lb-cafe"),    fx:52, fy:73, num:5, a:.73, b:.82, rev:1}
+    ];
+    var intro = document.getElementById("intro");
+    var cue = document.getElementById("cue");
+    var finale = document.getElementById("finale");
+    var counter = document.getElementById("counter");
+    var bar = document.querySelector(".bar");
+    var journey = document.getElementById("journey");
+
+    function lerp(a,b,t){ return a + (b-a)*t; }
+    function clamp01(x){ return Math.max(0,Math.min(1,x)); }
+    function seg(p,a,b){ return clamp01((p-a)/(b-a)); }
+
+    /* escala: um único zoom, sem troca de camada */
+    function sc(p){
+      if (p<=.78) return lerp(.58, S_MAX, clamp01(p/.78));
+      return lerp(S_MAX, S_MAX*1.08, seg(p,.78,1));
+    }
+
+    function fade(p,a,b,si,so){
+      if (p < a-si || p > b+so) return 0;
+      if (p < a) return seg(p, a-si, a);
+      if (p > b) return 1-seg(p, b, b+so);
+      return 1;
+    }
+    function ease(t){ return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+
+    function calcCap(){
+      var nat = bean.naturalWidth;
+      if (!nat) return;
+      var w = wrap.getBoundingClientRect().width;
+      if (!w) return;
+      var dpr = window.devicePixelRatio || 1;
+      var cap = nat / (w * dpr);
+      S_MAX = Math.max(.65, Math.min(S_DESIRED, cap));
+    }
+
+    function apply(p){
+      var s = sc(p);
+      bean.style.transform = "scale("+s.toFixed(4)+")";
+      glow.style.transform = "scale("+s.toFixed(4)+")";
+      var wr = wrap.getBoundingClientRect();
+      var vh = window.innerHeight;
+      for (var i=0;i<labels.length;i++){
+        var L = labels[i];
+        L.el.style.left = (50 + (L.fx-50)*s).toFixed(2) + "%";
+        var topPct = 50 + (L.fy-50)*s;
+        if (wr.height){
+          /* trava de borda: o ponto nunca sai da tela (o zoom fundo empurraria o
+             dot da CAFEÍNA abaixo da borda; rev deixa a caixa em cima dele) */
+          var lo = L.rev ? 246 : 118, hi = L.rev ? vh - 46 : vh - 88;
+          var yPx = wr.top + wr.height * topPct / 100;
+          if (yPx > hi) yPx = hi;
+          if (yPx < lo) yPx = lo;
+          topPct = (yPx - wr.top) / wr.height * 100;
+        }
+        L.el.style.top  = topPct.toFixed(2) + "%";
+        L.el.style.opacity = ease(fade(p, L.a, L.b, .02, .02)).toFixed(3);
+      }
+      var io = clamp01(1 - p/.14);
+      intro.style.opacity = io;
+      intro.style.visibility = io<=0 ? "hidden" : "visible";
+      var co = Math.min(io, clamp01(1 - (p-.06)/.10));
+      cue.style.opacity = co;
+      cue.style.visibility = co<=0 ? "hidden" : "visible";
+      var fo = fade(p,.92,1,.012,.008);
+      finale.style.opacity = fo;
+      finale.classList.toggle("on", fo>.5);
+      var bo = 1-seg(p,.86,.90);
+      bar.style.opacity = bo.toFixed(3);
+      bar.style.pointerEvents = bo>.4 ? "auto" : "none";
+      var n = 0;
+      for (var j=0;j<labels.length;j++) if (p>=labels[j].a-.02) n=labels[j].num;
+      counter.innerHTML = "<b>0"+n+"</b> — 05";
+      counter.style.opacity = (n>0 && p<.83) ? 1 : 0;
+    }
+
+    function onScroll(){
+      if (forced!==null){ apply(forced); return; }
+      var range = journey.offsetHeight - window.innerHeight;
+      var p = clamp01(window.scrollY / Math.max(1, range));
+      apply(p);
+    }
+    window.addEventListener("scroll", onScroll, {passive:true});
+    window.addEventListener("resize", function(){ calcCap(); onScroll(); });
+
+    calcCap();
+    if (bean.complete && bean.naturalWidth) calcCap();
+    bean.addEventListener("load", function(){ calcCap(); onScroll(); });
+
+    // fallback: se a foto não existir, usa o grão SVG
+    var FALLBACK = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280"><defs><radialGradient id="g" cx="35%" cy="28%" r="80%"><stop offset="0%" stop-color="#2E241D"/><stop offset="55%" stop-color="#1C1714"/><stop offset="100%" stop-color="#131009"/></radialGradient></defs><ellipse cx="110" cy="140" rx="93" ry="124" fill="url(#g)" stroke="#F5EFE6" stroke-width="3"/><path d="M110 28 C 72 80, 150 122, 110 150 C 70 178, 150 216, 110 252" stroke="#FF8A00" stroke-width="7" stroke-linecap="round" opacity=".92" fill="none"/></svg>');
+    bean.addEventListener("error", function(){ this.src = FALLBACK; }, {once:true});
+    glow.addEventListener("error", function(){ this.style.display = "none"; }, {once:true});
+
+    onScroll();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+/* Saiba Café · blog v0 · camada sobre ../style.css (mesmo design system: NOIR LAB)
+   fase 2 de-AI: índice em lista editorial (sem cards, sem pills, sem ícones),
+   paleta única (creme + âmbar + muted), nada de border-radius > 4px.
+   reutiliza as CSS vars de style.css · nada de CDN, nada de webfont */
+
+/* ---------- topbar: nav estático (o .nav do style.css é absoluto; aqui ele fixa no topo) ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(18, 16, 14, .94);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(6px);
+}
+.topbar .nav {
+  position: static;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-block: clamp(15px, 2.2vw, 20px);
+  /* coluna única: mesma âncora do .container (max-width 1180 + padding clamp(20px,5vw,48px)) */
+  padding-inline: clamp(20px, 5vw, 48px);
+}
+.topbar .nav-brand { color: var(--amber); }
+
+/* fix: meta do ticker com contraste AA garantido */
+.tick-meta { color: var(--muted-strong); }
+
+/* fix: a tarja de cotação fica full-bleed (fundo) mas o conteúdo ancora na MESMA coluna
+   do .container: padding-inline = offset do container centrado + padding do container */
+.ticker {
+  padding: 20px calc(max((100% - 1180px) / 2, 0px) + clamp(20px, 5vw, 48px));
+}
+
+/* o ponto pulsante é coisa de dashboard: no jornal de café, só texto */
+.ticker .tick-dot { display: none; }
+
+/* ---------- hero compacto do índice ---------- */
+.blog-hero {
+  padding: clamp(52px, 8vw, 110px) 0 clamp(36px, 5vw, 64px);
+  border-bottom: 1px solid var(--line);
+}
+.blog-hero-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-inline: clamp(20px, 5vw, 48px);
+}
+.blog-hero .kicker { margin-bottom: clamp(14px, 2vw, 24px); }
+.blog-hero-title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(46px, 8.6vw, 116px);
+  line-height: .97;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+}
+.blog-hero-title .line-accent { color: var(--amber); }
+.blog-hero .tagline {
+  margin-top: clamp(16px, 2.4vw, 28px);
+  font-size: clamp(16px, 2vw, 22px);
+  color: var(--muted-strong);
+  font-style: italic;
+}
+
+/* ---------- filtro: linha de texto, sem pills ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-top: clamp(26px, 4vw, 44px);
+}
+.chip {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: .02em;
+  text-transform: none;
+  color: var(--muted);
+  background: none;
+  border: none;
+  padding: 6px 4px;
+  cursor: pointer;
+  transition: color .2s;
+}
+.chip:hover, .chip:focus-visible { color: var(--creme); }
+.chip.on {
+  color: var(--amber);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.filters .sep { color: var(--muted); font-family: var(--sans); font-size: 12px; }
+.entry.hide, .feature-entry.hide { display: none; }
+
+/* ---------- manchete: destaque no topo, sem caixa ---------- */
+.feature-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: clamp(20px, 3.5vw, 40px);
+  /* fix: texto centrado contra a arte — sem vazio pendurado sob o "ler a matéria" */
+  align-items: center;
+  margin-top: clamp(20px, 3vw, 32px);
+  padding-block: clamp(20px, 3vw, 30px);
+  border-top: 1px solid var(--line);
+}
+.feature-meta { display: flex; align-items: baseline; gap: 10px; }
+.feature-date { font-family: var(--sans); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.feature-type { font-family: var(--sans); font-size: 12px; letter-spacing: .02em; color: var(--amber); }
+.feature-title {
+  margin-top: 10px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(24px, 3.2vw, 30px);
+  line-height: 1.12;
+  letter-spacing: -.01em;
+  text-transform: none;
+  max-width: 24ch;
+}
+.feature-title a { color: var(--creme); }
+.feature-title a:hover, .feature-title a:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.feature-lead {
+  margin-top: 10px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted-strong);
+  font-style: italic;
+  max-width: 56ch;
+}
+.feature-cta {
+  display: inline-block;
+  margin-top: 14px;
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: .02em;
+  color: var(--amber);
+}
+.feature-cta:hover, .feature-cta:focus-visible { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.feature-art { margin: 0; }
+.feature-art img {
+  width: 100%;
+  max-width: 300px;
+  /* fix: altura limitada a 270px, cover central: a janela visível da capa (1080x1350)
+     é ~14%..86% da altura — o título "A RESPOSTA / 3,8 MILHÕES / DE SACAS" ocupa
+     31%..64% e fica inteiro; só o rodapé miúdo da capa (89%+) sai da moldura */
+  height: 270px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+/* ---------- índice: lista editorial, filetes de 1px entre as entradas ---------- */
+.entries {
+  margin-top: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.entry {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: clamp(14px, 2.4vw, 24px);
+  align-items: start;
+  padding-block: clamp(16px, 2.4vw, 22px);
+  border-bottom: 1px solid var(--line);
+}
+.entry-meta { display: flex; flex-direction: column; gap: 4px; }
+.entry-date { font-family: var(--sans); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.entry-type { font-family: var(--sans); font-size: 12px; letter-spacing: .02em; color: var(--muted-strong); }
+.entry-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1.22;
+  letter-spacing: -.005em;
+  text-transform: none;
+}
+.entry-title a { color: var(--creme); }
+.entry-title a:hover, .entry-title a:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.entry-summary {
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted-strong);
+  max-width: 66ch;
+}
+.entry-cta {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  letter-spacing: .02em;
+  color: var(--muted-strong);
+}
+.entry-cta:hover, .entry-cta:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  color: var(--creme);
+}
+
+/* blog tem poucos links: no mobile, mostre TODOS (o hub esconde tudo menos o último) */
+@media (max-width: 700px) {
+  .topbar .nav-links a:not(:last-child) { display: inline; }
+}
+
+.archive-note {
+  margin-top: clamp(32px, 4.5vw, 52px);
+  font-style: italic;
+  color: var(--muted-strong);
+  font-size: 15px;
+}
+
+/* ---------- página da matéria ---------- */
+.post-hero {
+  padding: clamp(44px, 6.5vw, 88px) clamp(24px, 5vw, 64px) clamp(28px, 4vw, 48px);
+  border-bottom: 1px solid var(--line);
+}
+.post-hero-inner { max-width: 1180px; margin: 0 auto; }
+.post-hero .kicker { margin-bottom: clamp(14px, 2vw, 22px); }
+.post-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 520px);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: end;
+}
+.post-hero h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(34px, 5.4vw, 78px);
+  line-height: 1.02;
+  text-transform: none;
+  letter-spacing: -.01em;
+}
+.post-lead {
+  margin-top: clamp(16px, 2.4vw, 26px);
+  font-size: clamp(18px, 2.2vw, 23px);
+  line-height: 1.55;
+  max-width: 52ch;
+}
+.post-lead strong { color: var(--amber); }
+.post-meta {
+  margin-top: clamp(18px, 2.6vw, 30px);
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: .02em;
+  text-transform: none;
+  color: var(--muted-strong);
+}
+.post-meta b { color: var(--creme); font-weight: 900; }
+.post-hero-art img { width: 100%; height: auto; max-width: 520px; display: block; border-radius: 4px; border: 1px solid var(--line); }
+.post-hero-art figcaption { margin-top: 9px; font-family: var(--sans); font-size: 13px; color: var(--muted-strong); font-style: italic; }
+@media (max-width: 900px) {
+  .post-hero-grid { grid-template-columns: 1fr; align-items: start; }
+  .post-hero-art { max-width: 100%; }
+  .post-hero-art img { max-width: 100%; }
+}
+
+.post-wrap {
+  max-width: 856px;
+  margin: 0 auto;
+  padding-block: clamp(36px, 5.5vw, 64px);
+  padding-inline: clamp(20px, 5vw, 48px);
+}
+
+/* prosa */
+.post-body p { margin-block: 1.15em; font-size: 18.5px; line-height: 1.78; }
+.post-body strong { color: var(--creme); font-weight: 700; }
+.post-body h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: none;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  margin: 2em 0 .55em;
+}
+.post-body h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: none;
+  font-size: clamp(17px, 2.1vw, 21px);
+  letter-spacing: normal;
+  color: var(--creme);
+  margin: 1.9em 0 .35em;
+}
+.post-body ul { margin: 1.1em 0; display: grid; gap: .55em; }
+.post-body ul li { padding-left: 20px; position: relative; line-height: 1.7; }
+.post-body ul li::before { content: "·"; position: absolute; left: 2px; color: var(--amber); font-weight: 900; }
+.post-body a {
+  color: var(--amber);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color .2s;
+}
+.post-body a:hover, .post-body a:focus-visible { color: var(--creme); }
+
+/* faixa de números de jornal: filete em cima e embaixo, número grande, label miúda */
+.statrow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 3vw, 32px);
+  margin: clamp(26px, 4vw, 44px) 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding-block: clamp(20px, 3vw, 32px);
+}
+.statrow .n {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(32px, 5vw, 58px);
+  color: var(--amber);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.statrow .l { margin-top: 9px; font-size: 13px; color: var(--muted-strong); font-style: italic; line-height: 1.45; }
+
+/* figuras */
+figure.fig { margin: clamp(24px, 3vw, 36px) 0; }
+figure.fig img { width: 100%; height: auto; max-width: 600px; display: block; margin-inline: auto; border-radius: 4px; border: 1px solid var(--line); }
+figure.fig.portrait img { width: min(100%, 520px); }
+figure.fig figcaption { margin-top: 10px; font-family: var(--sans); font-size: 13px; color: var(--muted-strong); font-style: italic; }
+
+/* quem ganha / quem perde: duas colunas de texto com filete no meio, sem caixa */
+.wlp {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: clamp(24px, 4vw, 40px) 0;
+}
+.wlp .col { border: none; border-radius: 0; background: transparent; padding: 0; }
+.wlp .ganha { padding-right: clamp(18px, 3vw, 28px); }
+.wlp .perde { border-left: 1px solid var(--line); padding-left: clamp(18px, 3vw, 28px); }
+.wlp h3 { margin: 0 0 12px; font-family: var(--sans); font-weight: 700; font-size: 14px; letter-spacing: normal; text-transform: none; }
+.wlp .ganha h3 { color: var(--creme); }
+.wlp .perde h3 { color: var(--muted-strong); }
+.wlp ul { margin: 0; display: grid; gap: 10px; }
+.wlp li { font-size: 16px; line-height: 1.6; padding-left: 16px; position: relative; }
+.wlp li::before { content: "·"; position: absolute; left: 0; color: var(--amber); font-weight: 900; }
+
+/* bloco de fontes: seção de jornal, filete no topo, sem caixa âmbar */
+.srcbox {
+  margin-top: clamp(32px, 5vw, 48px);
+  padding: clamp(20px, 3vw, 28px) 0 0;
+  border: none;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+}
+.srcbox h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(19px, 2.4vw, 24px);
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--amber);
+  margin: 0 0 14px;
+}
+.srcbox ol { list-style: decimal; padding-left: 22px; display: grid; gap: 10px; font-size: 15.5px; line-height: 1.6; color: var(--muted-strong); }
+.srcbox a { color: var(--creme); text-decoration: underline; text-decoration-color: var(--amber); text-underline-offset: 3px; }
+.srcbox a:hover, .srcbox a:focus-visible { color: var(--amber); }
+.srcbox .srcdate { color: var(--muted); font-style: italic; }
+
+/* nota editorial "chuta aí": régua à esquerda, fundo transparente, sem radius, sem ícone */
+.onublock {
+  margin-top: clamp(32px, 5vw, 48px);
+  padding: 2px 0 2px clamp(18px, 3vw, 28px);
+  border: none;
+  border-left: 3px solid var(--amber);
+  border-radius: 0;
+  background: transparent;
+  font-size: clamp(17px, 2vw, 20px);
+}
+.onublock .display-amber {
+  color: var(--amber);
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 1em;
+}
+
+/* nav fim da matéria */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: clamp(40px, 6vw, 64px);
+  padding-top: clamp(20px, 3vw, 32px);
+  border-top: 1px solid var(--line);
+}
+.post-nav a {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: .02em;
+  text-transform: none;
+  color: var(--amber);
+}
+.post-nav a:hover, .post-nav a:focus-visible { color: var(--creme); }
+
+/* ---------- ajustes mobile (≤700px) ---------- */
+@media (max-width: 700px) {
+  /* nav com alvo de toque confortável (≥44px visando) */
+  .topbar .nav-links a, .topbar .nav-links a:not(:last-child) {
+    display: inline-block;
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+
+  /* manchete empilha: texto primeiro, arte em largura cheia SEM recorte (retrato inteiro) */
+  .feature-entry { grid-template-columns: 1fr; gap: 18px; align-items: start; }
+  .feature-art img { max-width: 100%; height: auto; }
+
+  /* lista editorial: meta vira linha corrida acima do título */
+  .entry { grid-template-columns: 1fr; gap: 8px; }
+  .entry-meta { flex-direction: row; align-items: baseline; gap: 10px; }
+
+  .post-wrap { padding-inline: clamp(22px, 5vw, 48px); }
+
+  /* imagens em largura cheia, sem moldura/sobra */
+  .post-hero-art img, figure.fig img { max-width: 100%; border: none; }
+
+  /* statrow: 3 colunas compactas, não 3 telas */
+  .statrow { grid-template-columns: repeat(3, 1fr); gap: 12px; padding-block: 18px; }
+  .statrow .n { font-size: 22px; }
+  .statrow .l { font-size: 12px; margin-top: 6px; line-height: 1.4; }
+
+  /* ganha/perde empilhados com filete separando */
+  .wlp { grid-template-columns: 1fr; gap: 22px; }
+  .wlp .ganha { padding-right: 0; }
+  .wlp .perde { border-left: none; padding-left: 0; border-top: 1px solid var(--line); padding-top: 20px; }
+}
