@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Saiba Café</title>
+  <meta name="description" content="do grão à xícara, sempre com fonte citada. café com notícia, todo dia às 07h30.">
+  <meta property="og:title" content="Saiba Café">
+  <meta property="og:description" content="do grão à xícara, sempre com fonte citada. café com notícia, todo dia às 07h30.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://saiba-cafe.vercel.app/linktree/">
+  <meta property="og:image" content="https://saiba-cafe.vercel.app/assets/roundel.jpg">
+  <meta name="theme-color" content="#12100E">
+  <link rel="icon" type="image/jpeg" href="../assets/roundel.jpg">
+  <style>
+    :root {
+      --bg: #12100E;
+      --bg-soft: #171310;
+      --surface: #1C1714;
+      --amber: #FF8A00;
+      --creme: #F5EFE6;
+      --muted: #8A7A6A;
+      --muted-strong: #A89A8C;
+      --line: rgba(245, 239, 230, 0.14);
+      --display: Georgia, "Times New Roman", serif;
+      --sans: "Corbel", "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--creme);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.55;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .grain, .vignette {
+      position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    }
+    .grain {
+      opacity: .06;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .vignette {
+      z-index: 49;
+      background: radial-gradient(120% 90% at 50% 38%, transparent 55%, rgba(0, 0, 0, .5) 100%);
+    }
+
+    .page {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 460px;
+      margin: 0 auto;
+      padding: clamp(48px, 8vw, 72px) 24px;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile { text-align: center; }
+
+    .avatar {
+      position: relative;
+      width: 112px;
+      height: 112px;
+      margin: 0 auto 20px;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+    .ring {
+      position: absolute;
+      inset: -9%;
+      width: 118%;
+      height: 118%;
+      pointer-events: none;
+    }
+    .ring-a { animation: spin 46s linear infinite; }
+    .ring-b { inset: -19%; width: 138%; height: 138%; animation: spin 90s linear infinite reverse; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .profile h1 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(34px, 9vw, 42px);
+      line-height: 1.05;
+      letter-spacing: -.01em;
+      text-transform: uppercase;
+    }
+    .tagline {
+      margin-top: 10px;
+      font-size: clamp(16px, 4.2vw, 18px);
+      color: var(--muted-strong);
+    }
+    .tagline em { font-style: italic; color: var(--muted-strong); }
+    .tagline strong { color: var(--amber); font-weight: 400; }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+    .link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 24px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--creme);
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      transition: transform .25s cubic-bezier(.2, .6, .2, 1), background .25s, border-color .25s, color .25s;
+      will-change: transform;
+    }
+    .link .arrow { flex-shrink: 0; font-family: var(--serif); font-weight: 400; transition: transform .25s cubic-bezier(.2, .6, .2, 1); }
+    .link:hover { border-color: rgba(255, 138, 0, .55); }
+    .link:hover .arrow { transform: translate(3px, -3px); }
+    .link:active { transform: scale(.98); }
+    .link.primary {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: #12100E;
+    }
+    .link.primary:hover { background: var(--creme); border-color: var(--creme); color: var(--bg); }
+    @media (hover: none) {
+      .link:hover { transform: none; }
+    }
+
+    .note {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--muted-strong);
+      text-align: center;
+      max-width: 320px;
+    }
+    .note strong { font-style: normal; color: var(--creme); font-weight: 400; }
+
+    .footer {
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .footer a:hover, .footer a:focus-visible { color: var(--amber); }
+
+    .rise {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: rise .7s cubic-bezier(.2, .6, .2, 1) forwards;
+      animation-delay: var(--d, 0ms);
+    }
+    @keyframes rise {
+      to { opacity: 1; transform: none; }
+    }
+
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+    ::selection { background: var(--amber); color: var(--bg); }
+
+    @media (max-width: 480px) {
+      .page { gap: 36px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .rise { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="profile">
+      <div class="avatar rise" style="--d: 0ms">
+        <svg class="ring ring-a" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="#FF8A00" stroke-width="0.5" stroke-dasharray="3 5"/></svg>
+        <svg class="ring ring-b" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#F5EFE6" stroke-width="0.3" stroke-dasharray="1 7" opacity="0.5"/></svg>
+        <img src="../assets/roundel.jpg" alt="Selo Saiba Café">
+      </div>
+      <h1 class="rise" style="--d: 80ms">Saiba Café</h1>
+      <p class="tagline rise" style="--d: 160ms">do grão à xícara,<br><em>sempre com <strong>fonte citada</strong></em></p>
+    </header>
+
+    <nav class="links" aria-label="Links do Saiba Café">
+      <a class="link primary rise" style="--d: 240ms" href="https://saiba-cafe.vercel.app/blog/">
+        <span>blog — café com notícia</span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="link rise" style="--d: 320ms" href="https://instagram.com/saiba.cafe" target="_blank" rel="noopener">
+        <span>@saiba.cafe no instagram</span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+    </nav>
+
+    <p class="note rise" style="--d: 400ms">notícia todo dia às <strong>07h30</strong> · curiosidade, dica e opinião às <strong>19h</strong></p>
+
+    <footer class="footer rise" style="--d: 480ms">© 2026 Saiba Café · do grão à xícara</footer>
+  </main>
+</body>
+</html>
