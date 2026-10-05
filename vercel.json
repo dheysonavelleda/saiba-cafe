@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/links", "destination": "/linktree/index.html" },
+    { "source": "/links/", "destination": "/linktree/index.html" },
+    { "source": "/grao", "destination": "/launch.html" },
+    { "source": "/grao/", "destination": "/launch.html" }
+  ]
+}
