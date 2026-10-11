@@ -303,6 +303,8 @@ ul { list-style: none; }
   border-radius: 50%;
   background: var(--amber);
 }
+.tag-dica { color: #A3E635; }
+.tag-dica::before { background: #A3E635; }
 .card h3 {
   font-family: var(--display);
   font-weight: 700;
