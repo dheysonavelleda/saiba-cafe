@@ -454,3 +454,7 @@ figure.fig figcaption { margin-top: 10px; font-family: var(--sans); font-size: 1
 .post-body ol li::marker { color: var(--amber); font-family: var(--sans); font-size: .85em; }
 .feature-entry .feature-title, .entry-title { font-weight: 500; }
 .blog-hero-title .line { display: block; }
+
+/* artes do Magnific: capas verticais não passam de 560px de altura */
+.post-hero-art img { width: auto; max-height: 560px; }
+.feature-art img { object-fit: contain; background: var(--bg); }
