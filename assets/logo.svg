@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Saiba Café">
+  <circle cx="64" cy="64" r="62" fill="#F2ECE2" stroke="#2A1C23" stroke-width="3"/>
+  <path d="M71 18c-13 3-13 12-1 16s12 13-2 17" fill="none" stroke="#2A1C23" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="64" cy="97" rx="36" ry="9" fill="#A4502F" stroke="#2A1C23" stroke-width="3.5"/>
+  <path d="M36 64h54v12a27 27 0 0 1-54 0z" fill="#FFFFFF" stroke="#2A1C23" stroke-width="3.5" stroke-linejoin="round"/>
+  <ellipse cx="63" cy="64" rx="27" ry="6" fill="#311210" stroke="#2A1C23" stroke-width="3"/>
+  <path d="M90 68h6a8 8 0 0 1 0 16h-8" fill="none" stroke="#2A1C23" stroke-width="3.5"/>
+</svg>

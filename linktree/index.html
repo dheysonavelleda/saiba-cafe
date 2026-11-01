@@ -10,22 +10,23 @@
   <meta property="og:description" content="do grão à xícara, sempre com fonte citada. café com notícia, todo dia às 07h30.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://saibacafe.com.br/linktree/">
-  <meta property="og:image" content="https://saibacafe.com.br/assets/roundel.jpg">
+  <meta property="og:image" content="https://saibacafe.com.br/assets/logo-magnific.png">
   <meta name="theme-color" content="#12100E">
-  <link rel="icon" type="image/jpeg" href="../assets/roundel.jpg">
+  <link rel="icon" type="image/png" href="../assets/logo-magnific.png">
   <style>
+    @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap");
     :root {
-      --bg: #12100E;
-      --bg-soft: #171310;
-      --surface: #1C1714;
-      --amber: #FF8A00;
-      --creme: #F5EFE6;
-      --muted: #8A7A6A;
-      --muted-strong: #A89A8C;
-      --line: rgba(245, 239, 230, 0.14);
-      --display: Georgia, "Times New Roman", serif;
-      --sans: "Corbel", "Segoe UI", sans-serif;
-      --serif: Georgia, "Times New Roman", serif;
+      --bg: #F2ECE2;
+      --bg-soft: #EAE2D4;
+      --surface: #F8F4EC;
+      --amber: #A4502F;
+      --creme: #2A1C23;
+      --muted: #7A6A62;
+      --muted-strong: #5C4C45;
+      --line: rgba(42, 28, 35, 0.16);
+      --display: "Playfair Display", Georgia, "Times New Roman", serif;
+      --sans: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+      --serif: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,10 +49,11 @@
       position: fixed; inset: 0; pointer-events: none; z-index: 50;
     }
     .grain {
-      opacity: .06;
+      opacity: .05;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
     .vignette {
+      display: none;
       z-index: 49;
       background: radial-gradient(120% 90% at 50% 38%, transparent 55%, rgba(0, 0, 0, .5) 100%);
     }
@@ -98,11 +100,10 @@
 
     .profile h1 {
       font-family: var(--display);
-      font-weight: 700;
-      font-size: clamp(34px, 9vw, 42px);
+      font-weight: 500;
+      font-size: clamp(36px, 9.5vw, 46px);
       line-height: 1.05;
       letter-spacing: -.01em;
-      text-transform: uppercase;
     }
     .tagline {
       margin-top: 10px;
@@ -129,23 +130,23 @@
       background: var(--surface);
       color: var(--creme);
       font-family: var(--sans);
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: .05em;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: .08em;
       text-transform: uppercase;
       transition: transform .25s cubic-bezier(.2, .6, .2, 1), background .25s, border-color .25s, color .25s;
       will-change: transform;
     }
     .link .arrow { flex-shrink: 0; font-family: var(--serif); font-weight: 400; transition: transform .25s cubic-bezier(.2, .6, .2, 1); }
-    .link:hover { border-color: rgba(255, 138, 0, .55); }
+    .link:hover { border-color: rgba(164, 80, 47, .55); }
     .link:hover .arrow { transform: translate(3px, -3px); }
     .link:active { transform: scale(.98); }
     .link.primary {
-      background: var(--amber);
-      border-color: var(--amber);
-      color: #12100E;
+      background: var(--creme);
+      border-color: var(--creme);
+      color: var(--bg);
     }
-    .link.primary:hover { background: var(--creme); border-color: var(--creme); color: var(--bg); }
+    .link.primary:hover { background: var(--amber); border-color: var(--amber); color: var(--bg); }
     @media (hover: none) {
       .link:hover { transform: none; }
     }
@@ -200,9 +201,9 @@
   <main class="page">
     <header class="profile">
       <div class="avatar rise" style="--d: 0ms">
-        <svg class="ring ring-a" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="#FF8A00" stroke-width="0.5" stroke-dasharray="3 5"/></svg>
-        <svg class="ring ring-b" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#F5EFE6" stroke-width="0.3" stroke-dasharray="1 7" opacity="0.5"/></svg>
-        <img src="../assets/roundel.jpg" alt="Selo Saiba Café">
+        <svg class="ring ring-a" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="#A4502F" stroke-width="0.5" stroke-dasharray="3 5"/></svg>
+        <svg class="ring ring-b" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#2A1C23" stroke-width="0.3" stroke-dasharray="1 7" opacity="0.5"/></svg>
+        <img src="../assets/logo-magnific.png" alt="Selo Saiba Café">
       </div>
       <h1 class="rise" style="--d: 80ms">Saiba Café</h1>
       <p class="tagline rise" style="--d: 160ms">do grão à xícara,<br><em>sempre com <strong>fonte citada</strong></em></p>

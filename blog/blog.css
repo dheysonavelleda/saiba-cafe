@@ -1,14 +1,14 @@
-/* Saiba Café · blog v0 · camada sobre ../style.css (mesmo design system: NOIR LAB)
+/* Saiba Café · blog v1 · camada sobre ../style.css (design system: CREME, padrão do Instagram)
    fase 2 de-AI: índice em lista editorial (sem cards, sem pills, sem ícones),
    paleta única (creme + âmbar + muted), nada de border-radius > 4px.
-   reutiliza as CSS vars de style.css · nada de CDN, nada de webfont */
+   reutiliza as CSS vars de style.css · fontes via style.css */
 
 /* ---------- topbar: nav estático (o .nav do style.css é absoluto; aqui ele fixa no topo) ---------- */
 .topbar {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(18, 16, 14, .94);
+  background: rgba(242, 236, 226, .94);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(6px);
 }
@@ -47,11 +47,11 @@
 .blog-hero .kicker { margin-bottom: clamp(14px, 2vw, 24px); }
 .blog-hero-title {
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(46px, 8.6vw, 116px);
   line-height: .97;
   letter-spacing: -.01em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 .blog-hero-title .line-accent { color: var(--amber); }
 .blog-hero .tagline {
@@ -107,7 +107,7 @@
 .feature-title {
   margin-top: 10px;
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(24px, 3.2vw, 30px);
   line-height: 1.12;
   letter-spacing: -.01em;
@@ -173,7 +173,7 @@
 .entry-title {
   margin: 0;
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 21px;
   line-height: 1.22;
   letter-spacing: -.005em;
@@ -235,7 +235,7 @@
 }
 .post-hero h1 {
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(34px, 5.4vw, 78px);
   line-height: 1.02;
   text-transform: none;
@@ -256,7 +256,7 @@
   text-transform: none;
   color: var(--muted-strong);
 }
-.post-meta b { color: var(--creme); font-weight: 900; }
+.post-meta b { color: var(--creme); font-weight: 500; }
 .post-hero-art img { width: 100%; height: auto; max-width: 520px; display: block; border-radius: 4px; border: 1px solid var(--line); }
 .post-hero-art figcaption { margin-top: 9px; font-family: var(--sans); font-size: 13px; color: var(--muted-strong); font-style: italic; }
 @media (max-width: 900px) {
@@ -274,10 +274,10 @@
 
 /* prosa */
 .post-body p { margin-block: 1.15em; font-size: 18.5px; line-height: 1.78; }
-.post-body strong { color: var(--creme); font-weight: 700; }
+.post-body strong { color: var(--creme); font-weight: 600; }
 .post-body h2 {
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   text-transform: none;
   font-size: clamp(26px, 4vw, 40px);
   line-height: 1.05;
@@ -286,7 +286,7 @@
 }
 .post-body h3 {
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   text-transform: none;
   font-size: clamp(17px, 2.1vw, 21px);
   letter-spacing: normal;
@@ -317,7 +317,7 @@
 }
 .statrow .n {
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(32px, 5vw, 58px);
   color: var(--amber);
   line-height: 1;
@@ -357,7 +357,7 @@ figure.fig figcaption { margin-top: 10px; font-family: var(--sans); font-size: 1
 }
 .srcbox h2 {
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(19px, 2.4vw, 24px);
   letter-spacing: normal;
   text-transform: none;
@@ -382,7 +382,7 @@ figure.fig figcaption { margin-top: 10px; font-family: var(--sans); font-size: 1
 .onublock .display-amber {
   color: var(--amber);
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 500;
   text-transform: none;
   letter-spacing: normal;
   font-size: 1em;
@@ -440,3 +440,21 @@ figure.fig figcaption { margin-top: 10px; font-family: var(--sans); font-size: 1
   .wlp .ganha { padding-right: 0; }
   .wlp .perde { border-left: none; padding-left: 0; border-top: 1px solid var(--line); padding-top: 20px; }
 }
+
+/* ---------- v1 creme ---------- */
+.topbar .nav-brand { font-family: var(--display); font-size: 19px; letter-spacing: 0; text-transform: none; }
+.blog-hero-title .line-accent { font-style: italic; }
+.feature-type, .entry-type { text-transform: uppercase; letter-spacing: .12em; font-size: 10.5px; }
+.post-hero .kicker { color: var(--amber); }
+.post-hero-grid.solo { grid-template-columns: minmax(0, 1fr); }
+.post-hero-grid.solo h1, .post-hero-grid.solo .post-lead { max-width: 30ch; }
+.post-hero-grid.solo .post-lead { max-width: 60ch; }
+.post-body ol { margin: 1.1em 0; padding-left: 22px; display: grid; gap: .55em; }
+.post-body ol li { line-height: 1.7; }
+.post-body ol li::marker { color: var(--amber); font-family: var(--sans); font-size: .85em; }
+.feature-entry .feature-title, .entry-title { font-weight: 500; }
+.blog-hero-title .line { display: block; }
+
+/* artes do Magnific: capas verticais não passam de 560px de altura */
+.post-hero-art img { width: auto; max-height: 560px; }
+.feature-art img { object-fit: contain; background: var(--bg); }

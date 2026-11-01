@@ -4,13 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saiba Café — o grão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#F2ECE2">
+<link rel="icon" type="image/png" href="assets/logo-magnific.png">
 <style>
   :root{
-    --bg:#12100E; --amber:#FF8A00; --creme:#F5EFE6;
-    --muted:#8A7A6A; --muted-strong:#A89A8C;
-    --thin:"Corbel","Segoe UI",sans-serif;
-    --serif:Georgia,"Times New Roman",serif;
-    --shadow:0 1px 3px rgba(8,4,3,.9),0 0 10px rgba(8,4,3,.55),0 0 26px rgba(8,4,3,.35);
+    --bg:#F2ECE2; --amber:#A4502F; --creme:#2A1C23;
+    --muted:#7A6A62; --muted-strong:#5C4C45;
+    --thin:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    --serif:"Playfair Display",Georgia,"Times New Roman",serif;
+    --shadow:0 1px 3px rgba(242,236,226,.9),0 0 10px rgba(242,236,226,.55),0 0 26px rgba(242,236,226,.35);
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--creme);font-family:var(--thin);font-weight:300}
@@ -26,8 +30,8 @@
 
   .bar{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
     padding:26px 38px;z-index:40}
-  .brand{font-size:11px;letter-spacing:.32em;color:rgba(245,239,230,.55);text-transform:uppercase;text-decoration:none;text-shadow:var(--shadow)}
-  .skip{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,239,230,.7);
+  .brand{font-size:11px;letter-spacing:.32em;color:rgba(42,28,35,.55);text-transform:uppercase;text-decoration:none;text-shadow:var(--shadow)}
+  .skip{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(42,28,35,.7);
     text-decoration:none;font-weight:300;text-shadow:var(--shadow)}
   .skip .arrow{color:var(--amber);margin-left:2px}
   .skip:hover{color:var(--creme)}
@@ -42,7 +46,7 @@
   /* ambient glow: o MESMO recorte borrado, no MESMO box e MESMO zoom — halo quente
      que abraça a silhueta do grão (sem fundo na imagem = sem painel possível). */
   #glow{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:-1;
-    will-change:transform,filter;filter:blur(36px)}
+    will-change:transform,filter;filter:blur(36px);opacity:.35}
 
   /* intro */
   #intro{position:absolute;left:50%;top:16%;transform:translate(-50%,-50%);text-align:center;z-index:20;
@@ -51,23 +55,23 @@
   #intro h1{font-family:var(--serif);font-size:clamp(36px,5.4vw,74px);line-height:1.12;margin:0;letter-spacing:.01em;font-weight:400;
     text-shadow:var(--shadow)}
   #intro h1 .it{font-family:var(--serif);font-style:italic;font-weight:400}
-  #intro .sub{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.5vw,19px);color:rgba(245,239,230,.72);
+  #intro .sub{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.5vw,19px);color:rgba(42,28,35,.72);
     margin:20px 0 0;font-weight:400;text-shadow:var(--shadow)}
   #cue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:.4em;
     text-transform:uppercase;color:var(--muted-strong);z-index:20;text-align:center;text-shadow:var(--shadow)}
-  #cue .arrow{display:block;color:rgba(245,239,230,.55);font-size:15px;margin-top:6px;font-weight:300;
+  #cue .arrow{display:block;color:rgba(42,28,35,.55);font-size:15px;margin-top:6px;font-weight:300;
     animation:bob 2s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 
   /* labels — filhos do beanWrap: o ponto é COLADO na feição do grão e acompanha
      o zoom (posição calculada no JS). Caixa/linha ficam em px fixos, texto não escala. */
   .label{position:absolute;z-index:25;opacity:0;pointer-events:none;will-change:opacity}
-  .label .dot{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(245,239,230,.92);
-    transform:translate(-50%,-50%);box-shadow:0 0 0 1.5px rgba(8,4,3,.55),0 0 10px 3px rgba(8,4,3,.75)}
+  .label .dot{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(42,28,35,.92);
+    transform:translate(-50%,-50%);box-shadow:0 0 0 1.5px rgba(242,236,226,.55),0 0 10px 3px rgba(242,236,226,.75)}
   .label .dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;
-    border:1px solid rgba(245,239,230,.22)}
-  .label .line{position:absolute;height:1px;background:rgba(245,239,230,.38);
-    box-shadow:0 0 0 1px rgba(8,4,3,.5),0 0 6px rgba(8,4,3,.9)}
+    border:1px solid rgba(42,28,35,.22)}
+  .label .line{position:absolute;height:1px;background:rgba(42,28,35,.38);
+    box-shadow:0 0 0 1px rgba(242,236,226,.5),0 0 6px rgba(242,236,226,.9)}
   .label .box{position:absolute;width:224px;top:-13px}
   .label.to-r .line{left:4px;top:0;width:46px}
   .label.to-r .box{left:80px}
@@ -76,16 +80,16 @@
   .label .head{display:flex;align-items:center;gap:13px}
   .label.to-l .head{flex-direction:row-reverse}
   .label .ico{width:26px;height:26px;flex:0 0 auto;opacity:.95}
-  .label .ico *{stroke:rgba(245,239,230,.92);stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .label .ico circle.f{fill:rgba(245,239,230,.92);stroke:none}
-  .label .num{font-size:10px;letter-spacing:.26em;color:rgba(245,239,230,.65);text-shadow:var(--shadow)}
-  .label .name{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:rgba(245,239,230,.97);
+  .label .ico *{stroke:rgba(42,28,35,.92);stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .label .ico circle.f{fill:rgba(42,28,35,.92);stroke:none}
+  .label .num{font-size:10px;letter-spacing:.26em;color:rgba(42,28,35,.65);text-shadow:var(--shadow)}
+  .label .name{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:rgba(42,28,35,.97);
     font-weight:300;text-shadow:var(--shadow)}
   .label .txt{font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.5;
-    color:rgba(245,239,230,.97);margin:9px 0 0;font-weight:400;text-shadow:var(--shadow)}
-  .label .src{font-size:10px;color:rgba(245,239,230,.75);margin:7px 0 0;letter-spacing:.04em;
+    color:rgba(42,28,35,.97);margin:9px 0 0;font-weight:400;text-shadow:var(--shadow)}
+  .label .src{font-size:10px;color:rgba(42,28,35,.75);margin:7px 0 0;letter-spacing:.04em;
     text-shadow:var(--shadow);display:inline-block;padding:3px 9px;
-    background:radial-gradient(closest-side,rgba(18,16,14,.5) 55%,rgba(18,16,14,0) 100%)}
+    background:radial-gradient(closest-side,rgba(242,236,226,.5) 55%,rgba(242,236,226,0) 100%)}
   /* variante rev: caixa ACIMA do dot — o zoom fundo empurra o dot da CAFEÍNA
      para a beira de baixo da tela e a caixa embaixo dele sai cortada; acima ela
      cabe sempre (o dot continua preso na feição, com trava de borda no JS) */
@@ -96,18 +100,18 @@
   #finale{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);z-index:30;text-align:center;
     opacity:0;pointer-events:none}
   #finale.on{pointer-events:auto}
-  .cta{display:inline-flex;align-items:center;gap:10px;background:var(--amber);color:#1B1206;
+  .cta{display:inline-flex;align-items:center;gap:10px;background:var(--amber);color:#F2ECE2;
     font-family:var(--thin);font-weight:400;font-size:13px;letter-spacing:.22em;text-transform:uppercase;
     padding:15px 30px;border:0;border-radius:999px;text-decoration:none;
-    box-shadow:0 4px 24px rgba(0,0,0,.45)}
-  #finale .note{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,239,230,.92);
+    box-shadow:0 4px 18px rgba(42,28,35,.18)}
+  #finale .note{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(42,28,35,.92);
     margin:15px 0 0;text-shadow:var(--shadow);display:inline-block;padding:6px 24px;
-    background:radial-gradient(closest-side,rgba(18,16,14,.55) 55%,rgba(18,16,14,0) 100%)}
+    background:radial-gradient(closest-side,rgba(242,236,226,.55) 55%,rgba(242,236,226,0) 100%)}
 
   /* counter */
   #counter{position:fixed;left:38px;bottom:32px;z-index:40;font-size:11px;letter-spacing:.3em;
-    color:rgba(245,239,230,.55);opacity:0;text-transform:uppercase;font-weight:300;text-shadow:var(--shadow)}
-  #counter b{font-weight:400;color:rgba(245,239,230,.92)}
+    color:rgba(42,28,35,.55);opacity:0;text-transform:uppercase;font-weight:300;text-shadow:var(--shadow)}
+  #counter b{font-weight:400;color:rgba(42,28,35,.92)}
 
   @media (max-width:700px){
     .bar{padding:20px 22px}
@@ -131,6 +135,10 @@
     #counter{left:22px;bottom:24px}
   }
   @media (prefers-reduced-motion:reduce){#cue .arrow{animation:none}}
+  /* v1 creme: grão sobre fundo creme, sombra suave */
+  #bean{filter:drop-shadow(0 18px 28px rgba(42,28,35,.25))}
+  #intro h1{font-weight:500}
+  .label .box{background:rgba(242,236,226,.9);padding:10px 12px;border-radius:6px;box-shadow:0 2px 12px rgba(42,28,35,.12)}
 </style>
 </head>
 <body>
@@ -340,7 +348,7 @@
     bean.addEventListener("load", function(){ calcCap(); onScroll(); });
 
     // fallback: se a foto não existir, usa o grão SVG
-    var FALLBACK = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280"><defs><radialGradient id="g" cx="35%" cy="28%" r="80%"><stop offset="0%" stop-color="#2E241D"/><stop offset="55%" stop-color="#1C1714"/><stop offset="100%" stop-color="#131009"/></radialGradient></defs><ellipse cx="110" cy="140" rx="93" ry="124" fill="url(#g)" stroke="#F5EFE6" stroke-width="3"/><path d="M110 28 C 72 80, 150 122, 110 150 C 70 178, 150 216, 110 252" stroke="#FF8A00" stroke-width="7" stroke-linecap="round" opacity=".92" fill="none"/></svg>');
+    var FALLBACK = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280"><defs><radialGradient id="g" cx="35%" cy="28%" r="80%"><stop offset="0%" stop-color="#2E241D"/><stop offset="55%" stop-color="#1C1714"/><stop offset="100%" stop-color="#131009"/></radialGradient></defs><ellipse cx="110" cy="140" rx="93" ry="124" fill="url(#g)" stroke="#2A1C23" stroke-width="3"/><path d="M110 28 C 72 80, 150 122, 110 150 C 70 178, 150 216, 110 252" stroke="#A4502F" stroke-width="7" stroke-linecap="round" opacity=".92" fill="none"/></svg>');
     bean.addEventListener("error", function(){ this.src = FALLBACK; }, {once:true});
     glow.addEventListener("error", function(){ this.style.display = "none"; }, {once:true});
 
